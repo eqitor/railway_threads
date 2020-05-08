@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <thread>
 #include <iostream>
-
+#include <ncurses.h>
 
 std::vector<Station*> Map::stations;
 std::vector<Train*> Map::trains;
@@ -18,22 +18,46 @@ void Map::simulate(){
 
 
     trains.push_back(new Train("Kosciuszko", 10, {0,1,2,3}));
-    trains.push_back(new Train("Hetman", 10, {0,1,2,3}));
+    trains.push_back(new Train("Hetman", 10, {3,2,1,0}));
+    trains.push_back(new Train("Kopernik", 10, {1,2,3}));
+    trains.push_back(new Train("Odra", 10, {2,3,0,1,3,1,2,0}));
 
     
-
-    // std::thread th1([trains[0]]{trains[0]->exist();});
-    // std::thread th2([trains[1]]{trains[1]->exist();});
 
     Train *t0 = trains[0];
     Train *t1 = trains[1];
-
+    Train *t2 = trains[2];
+    Train *t3 = trains[3];
     
     std::thread th0([t0]{t0->exist();});
     std::thread th1([t1]{t1->exist();});
+    std::thread th2([t2]{t2->exist();});
+    std::thread th3([t3]{t3->exist();});
 
-    th0.join();
-    th1.join();
+    std::string stop = "x";
+
+    while (true)
+    {
+        std::cin >> stop;
+        //std::cout << stop << std::endl;
+        if (stop == "q")
+        {
+            t0->stop();
+            t1->stop();
+            t2->stop();
+            t3->stop();
+
+
+            th0.join();
+            th1.join();
+            th2.join();
+            th3.join();
+            return;
+        }
+        
+    }
+    
+    
 
 
 

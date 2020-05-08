@@ -11,9 +11,8 @@ std::vector<unsigned int> Train::get_route(){
 
 void Train::exist(){
 
-    while (true)
+    while (is_active)
     {
-        //std::cout << "thr\n";
         Station *next_station = Map::find_station(route[current_dest]);
         std::cout << "Train " << this->name << ", ID: " << std::to_string(train_id) << " is traveling to " << next_station->get_station_name()
                     << " ID " << std::to_string(route[current_dest]) << std::endl;
@@ -24,6 +23,9 @@ void Train::exist(){
         /*try access to Station*/
         std::cout << "Train " + name + ", ID: " + std::to_string(train_id) + " is waiting for access to " + next_station->get_station_name()
                     + " ID " + std::to_string(route[current_dest])<< std::endl;
+
+
+        {
 
         std::lock_guard<std::mutex> guard(next_station->mutex);
 
@@ -38,6 +40,8 @@ void Train::exist(){
         if (current_dest == route_size-1)
         {
             current_dest = 0;
+        }
+
         }
         
     }
@@ -54,6 +58,13 @@ Train::Train(std::string name, unsigned int capacity, const std::initializer_lis
     route = route_array;
     route.insert(route.end(), route_array.begin(), route_array.end());
     current_dest = 0;
+    route_size = route.size();
+    is_active = true;
+}
+
+
+void Train::stop(){
+    is_active = false;
 }
 
 Train::Train(){};
