@@ -1,14 +1,16 @@
 
 #pragma once
+#include <vector>
 
 /*Representation of ticket booth.*/
 class TicketBooth{
 
-    private:
 
 
     public:
         TicketBooth();
         ~TicketBooth();
+
+
 
 };

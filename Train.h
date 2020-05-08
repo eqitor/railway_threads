@@ -2,6 +2,8 @@
 
 #include <string>
 #include <vector>
+#include "Station.h"
+#include "Map.h"
 
 /*Representation of train.*/
 class Train{
@@ -15,10 +17,16 @@ class Train{
         std::vector<unsigned int> route;
         unsigned int route_size;
 
+        unsigned int current_dest;
+
         static unsigned int id_counter;
 
     public:
+
+        std::vector<unsigned int> get_route();
+        void exist();
         Train(std::string, unsigned int, const std::initializer_list<unsigned int>);
+        Train();
         ~Train();
 
 };

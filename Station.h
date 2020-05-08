@@ -2,10 +2,14 @@
 #include "TicketBooth.h"
 #include <string>
 #include <vector>
+#include <mutex>
+
+class TicketBooth;
 
 
 class Station{
     private:
+
         unsigned int station_id;
         std::string name;
 
@@ -14,6 +18,14 @@ class Station{
         static unsigned int id_counter;
 
     public:
+
+        std::mutex mutex;
+
+        static unsigned int get_stations_ammount();
+        unsigned int get_station_id();
+        std::string get_station_name();
+
         Station(std::string, unsigned int);
+        Station();
         ~Station();
 };
