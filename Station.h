@@ -13,7 +13,7 @@ class Station{
         unsigned int station_id;
         std::string name;
 
-        std::vector<TicketBooth> booths_vector;
+        std::vector<TicketBooth*> booths_vector;
 
         static unsigned int id_counter;
 
@@ -24,6 +24,7 @@ class Station{
         static unsigned int get_stations_ammount();
         unsigned int get_station_id();
         std::string get_station_name();
+        std::vector<TicketBooth*> get_booths_vector();
 
         Station(std::string, unsigned int);
         Station();

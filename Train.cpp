@@ -12,8 +12,10 @@ std::vector<unsigned int> Train::get_route(){
 void Train::exist(){
 
     while (is_active)
-    {
-        Station *next_station = Map::find_station(route[current_dest]);
+    {   
+        std::unique_lock<std::mutex> train_lk(train_mutex);     //blokuje
+
+        next_station = Map::find_station(route[current_dest]);
         std::cout << "Train " << this->name << ", ID: " << std::to_string(train_id) << " is traveling to " << next_station->get_station_name()
                     << " ID " << std::to_string(route[current_dest]) << std::endl;
 
@@ -28,12 +30,18 @@ void Train::exist(){
         {
 
         std::lock_guard<std::mutex> guard(next_station->mutex);
+        
+        train_lk.unlock();      //odblokuj
+        train_cv.notify_all();  //powiadom
 
         std::cout << "Train " + name + ", ID: " + std::to_string(train_id) + " is on station " + next_station->get_station_name()
                     + " ID " + std::to_string(route[current_dest]) << std::endl;
 
         std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
+        train_lk.lock();    //zablokuj
+
+        }
         current_dest++;
 
 
@@ -42,11 +50,16 @@ void Train::exist(){
             current_dest = 0;
         }
 
-        }
+        
         
     }
     
 
+}
+
+bool Train::is_full(){
+    if(capacity-passengers == 0) return true;
+    return false;
 }
 
 
@@ -65,6 +78,18 @@ Train::Train(std::string name, unsigned int capacity, const std::initializer_lis
 
 void Train::stop(){
     is_active = false;
+}
+
+void Train::get_in(){
+    this->passengers++;
+}
+
+void Train::get_out(){
+    this->passengers--;
+}
+
+std::string Train::get_name(){
+    return name;
 }
 
 Train::Train(){};

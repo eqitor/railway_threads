@@ -18,6 +18,6 @@ class Map{
 
         static void simulate();
         static Station *find_station(unsigned int);
-        static Train *find_train_to_station(unsigned int);
+        static std::vector<Train*> find_trains_to_station(unsigned int);
 
 };

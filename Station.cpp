@@ -1,5 +1,4 @@
 #include "Station.h"
-
 #include <string>
 
 unsigned int Station::id_counter = 0;
@@ -25,9 +24,13 @@ Station::Station(std::string name, unsigned int booth_ammount){
     
     for (int i = 0; i < booth_ammount; i++)
     {
-        booths_vector.push_back(TicketBooth());
+        booths_vector.push_back(new TicketBooth());
     }
     
+}
+
+std::vector<TicketBooth*> Station::get_booths_vector(){
+    return booths_vector;
 }
 
 Station::Station(){};

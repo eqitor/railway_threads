@@ -1,5 +1,5 @@
-railway_threads: main.o Passenger.o Station.o Train.o TicketBooth.o Map.o
-	g++ main.o Passenger.o Station.o Train.o TicketBooth.o Map.o -o railway_threads -pthread -lncurses
+railway_threads: main.o Passenger.o Station.o Train.o TicketBooth.o Map.o SynchOut.o
+	g++ main.o Passenger.o Station.o Train.o TicketBooth.o Map.o SynchOut.o -o railway_threads -pthread -lncurses -g
 
 main.o: main.cpp
 	g++ -c main.cpp -pthread -lncurses
@@ -18,6 +18,9 @@ TicketBooth.o: TicketBooth.cpp
 
 Map.o: Map.cpp
 	g++ -c Map.cpp -pthread
+
+SynchOut.o: SynchOut.cpp
+	g++ -c SynchOut.cpp -pthread
 
 
 clean:

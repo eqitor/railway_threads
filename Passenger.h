@@ -1,16 +1,21 @@
 #pragma once
 #include <random>
 #include <chrono>
+#include <thread>
+#include <iostream>
 #include "Station.h"
 #include "Map.h"
+#include "Train.h"
 
-
+class Train;
 
 class Passenger{
     private:
         unsigned int passenger_id;
         Station * actual_station;
+        Station * destination_station;
         std::mt19937 range{ std::random_device{}() };
+        Train *selected_train;
 
 
         static unsigned int id_counter;
@@ -22,5 +27,5 @@ class Passenger{
 
         void exist();
         void set_destination();
-        void try_buy_ticket();
+        bool try_buy_ticket();
 };

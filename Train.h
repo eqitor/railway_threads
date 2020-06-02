@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <condition_variable>
 #include "Station.h"
 #include "Map.h"
 
@@ -23,10 +24,16 @@ class Train{
         static unsigned int id_counter;
 
     public:
-
+        Station *next_station;  //zrobić getter
+        std::mutex train_mutex;
+        std::condition_variable train_cv;
         std::vector<unsigned int> get_route();
         void exist();
         void stop();
+        bool is_full();
+        void get_in();
+        void get_out();
+        std::string get_name();
         Train(std::string, unsigned int, const std::initializer_list<unsigned int>);
         Train();
         ~Train();
