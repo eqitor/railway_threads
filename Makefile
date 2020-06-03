@@ -1,5 +1,5 @@
-railway_threads: main.o Passenger.o Station.o Train.o TicketBooth.o Map.o SynchOut.o
-	g++ main.o Passenger.o Station.o Train.o TicketBooth.o Map.o SynchOut.o -o railway_threads -pthread -lncurses -g
+railway_threads: main.o Passenger.o Station.o Train.o TicketBooth.o Map.o SynchOut.o RandomIntGenerator.o
+	g++ main.o Passenger.o Station.o Train.o TicketBooth.o Map.o SynchOut.o RandomIntGenerator.o -o railway_threads -pthread -lncurses -g
 
 main.o: main.cpp
 	g++ -c main.cpp -pthread -lncurses
@@ -21,6 +21,9 @@ Map.o: Map.cpp
 
 SynchOut.o: SynchOut.cpp
 	g++ -c SynchOut.cpp -pthread
+
+RandomIntGenerator.o: RandomIntGenerator.cpp
+	g++ -c RandomIntGenerator.cpp
 
 
 clean:

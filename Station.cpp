@@ -29,6 +29,10 @@ Station::Station(std::string name, unsigned int booth_ammount){
     
 }
 
+int Station::get_booths_ammount(){
+    return booths_vector.size();
+}
+
 std::vector<TicketBooth*> Station::get_booths_vector(){
     return booths_vector;
 }

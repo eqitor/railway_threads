@@ -4,6 +4,9 @@
 // #include "Train.h"
 #include "Map.h"
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 
 
 using namespace std;
@@ -11,18 +14,8 @@ using namespace std;
 
 int main(){
 
-    // Station *station = new Station("Zamosc Starowka",5);
-    // Train *train = new Train("Hetman",10,{1,2,3,4});
-    // Passenger *passenger = new Passenger(station);
-
-    // delete station;
-    // delete train;
-    // delete passenger;
-
-    // Map *map = new Map();
-    // map->simulate();
-    // delete map;
-
+    
+    srand (time(NULL));
     Map::simulate();
 
 }

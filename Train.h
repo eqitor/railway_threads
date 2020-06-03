@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <condition_variable>
+#include "SynchOut.h"
 #include "Station.h"
 #include "Map.h"
 

@@ -16,32 +16,39 @@ void Train::exist(){
         std::unique_lock<std::mutex> train_lk(train_mutex);     //blokuje
 
         next_station = Map::find_station(route[current_dest]);
-        std::cout << "Train " << this->name << ", ID: " << std::to_string(train_id) << " is traveling to " << next_station->get_station_name()
-                    << " ID " << std::to_string(route[current_dest]) << std::endl;
+        SynchOut::print("Train " + this->name + ", ID: " + std::to_string(train_id) + " is traveling to " + next_station->get_station_name()
+                    + " ID " + std::to_string(route[current_dest]));
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000));
         
 
         /*try access to Station*/
-        std::cout << "Train " + name + ", ID: " + std::to_string(train_id) + " is waiting for access to " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest])<< std::endl;
+        SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is waiting for access to " + next_station->get_station_name()
+                    + " ID " + std::to_string(route[current_dest]));
 
 
-        {
+         
 
-        std::lock_guard<std::mutex> guard(next_station->mutex);
+        std::unique_lock<std::mutex> guard(next_station->mutex, std::defer_lock);
+        SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is on station " + next_station->get_station_name()
+                    + " ID " + std::to_string(route[current_dest]));
+
+        guard.lock();
         
         train_lk.unlock();      //odblokuj
         train_cv.notify_all();  //powiadom
 
-        std::cout << "Train " + name + ", ID: " + std::to_string(train_id) + " is on station " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]) << std::endl;
+        
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        
+
+        guard.unlock();
+
 
         train_lk.lock();    //zablokuj
 
-        }
+        
         current_dest++;
 
 
