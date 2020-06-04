@@ -15,6 +15,7 @@ class Train{
         std::string name;
         unsigned int capacity;
         unsigned int passengers;
+        unsigned int tickets;
         bool is_active;
 
         std::vector<unsigned int> route;
@@ -34,7 +35,10 @@ class Train{
         bool is_full();
         void get_in();
         void get_out();
+        void buy_ticket();
+        void free_ticket();
         std::string get_name();
+        bool is_routing();
         Train(std::string, unsigned int, const std::initializer_list<unsigned int>);
         Train();
         ~Train();

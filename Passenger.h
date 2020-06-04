@@ -17,6 +17,7 @@ class Passenger{
         Station * destination_station;
         std::mt19937 range{ std::random_device{}() };
         Train *selected_train;
+        bool is_active;
 
 
         static unsigned int id_counter;
@@ -29,4 +30,5 @@ class Passenger{
         void exist();
         void set_destination();
         bool try_buy_ticket();
+        void stop();
 };

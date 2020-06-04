@@ -9,6 +9,7 @@ Passenger::Passenger(Station* start_station){
     
     passenger_id = id_counter++;
     actual_station = start_station;
+    is_active = true;
 };
 
 Passenger::Passenger(){};
@@ -17,7 +18,7 @@ Passenger::~Passenger(){};
 
 void Passenger::exist(){
 
-    while (true)
+    while (is_active)
     {
         //wybierz cel
         SynchOut::print("Passenger " + std::to_string(passenger_id) + " is visiting " + actual_station->get_station_name());
@@ -38,9 +39,12 @@ void Passenger::exist(){
         selected_train->train_cv.wait(lk, [&]{return destination_station->get_station_id() == selected_train->next_station->get_station_id();});
         //wysiadam
         this->selected_train->get_out();
+        this->selected_train->free_ticket();
         this->actual_station = this->destination_station;
         
     }
+
+    SynchOut::print("Passenfer " + std::to_string(passenger_id) + " stops.");
     
 };
 
@@ -85,7 +89,12 @@ bool Passenger::try_buy_ticket(){
 
     if(this->selected_train == nullptr) return 0;
     SynchOut::print("Passenger " + std::to_string(passenger_id) + " bought ticket for train " + selected_train->get_name());
+    selected_train->buy_ticket();
     return 1;
 
 
+}
+
+void Passenger::stop(){
+    is_active = false;
 }

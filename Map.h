@@ -13,6 +13,15 @@ class Map{
         static std::vector<Station*> stations;
         static std::vector<Passenger*> passengers;
         static std::vector<Train*> trains;
+        static std::vector<std::thread*> passenger_threads;
+        static std::vector<std::thread*> train_threads;
+        
+
+
+        static void create_passenger(int);
+        static void stop_passenger(int);
+        static void create_train(std::string, unsigned int, const std::initializer_list<unsigned int>);
+        static void stop_train(int);
 
     public:
 

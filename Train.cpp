@@ -11,7 +11,7 @@ std::vector<unsigned int> Train::get_route(){
 
 void Train::exist(){
 
-    while (is_active)
+    while (is_active || passengers != 0 || tickets != capacity)
     {   
         std::unique_lock<std::mutex> train_lk(train_mutex);     //blokuje
 
@@ -56,10 +56,9 @@ void Train::exist(){
         {
             current_dest = 0;
         }
-
-        
-        
     }
+
+    SynchOut::print("****************************Train " + name + " stops.");
     
 
 }
@@ -69,12 +68,17 @@ bool Train::is_full(){
     return false;
 }
 
+bool Train::is_routing(){
+    return is_active;
+}
+
 
 Train::Train(std::string name, unsigned int capacity, const std::initializer_list<unsigned int> route_array){
 
     train_id = id_counter++;
     this->name = name;
     this->capacity = capacity;
+    this->tickets = capacity;
     route = route_array;
     route.insert(route.end(), route_array.begin(), route_array.end());
     current_dest = 0;
@@ -89,6 +93,14 @@ void Train::stop(){
 
 void Train::get_in(){
     this->passengers++;
+}
+
+void Train::buy_ticket(){
+    this->tickets--;
+}
+
+void Train::free_ticket(){
+    this->tickets++;
 }
 
 void Train::get_out(){
