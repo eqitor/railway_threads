@@ -1,5 +1,5 @@
 #include "Map.h"
-#include "SynchOut.h"
+#include "SynchIO.h"
 #include <algorithm>
 #include <thread>
 #include <iostream>
@@ -43,12 +43,14 @@ void Map::stop_train(int id){
 
 void Map::simulate(){
     
-    std::cout << "Working" << std::endl;
+    std::cout << "Workinncsng" << std::endl;
+    initscr();
+    refresh();
 
-    stations.push_back(new Station("Wroclaw", 5));      //0
-    stations.push_back(new Station("Olesnica", 2));     //1
-    stations.push_back(new Station("Brzeg", 1));        //2
-    stations.push_back(new Station("Olawa", 3));        //3
+    stations.push_back(new Station("Wroclaw", 5, 10, 10));      //0
+    stations.push_back(new Station("Olesnica", 2, 10, 10+20));     //1
+    stations.push_back(new Station("Brzeg", 1, 10, 10 + 2*20));        //2
+    stations.push_back(new Station("Olawa", 3 ,10, 10 + 3*20));        //3
 
 
     create_train("Kosciuszko", 10, {0,1,2,3});
@@ -57,19 +59,12 @@ void Map::simulate(){
     create_train("Odra", 10, {2,3,0,1,3,1,2,0});
 
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 2; i++)
     {
         create_passenger(i%4);
     }
 
     
-        
-
-
-    // std::thread th0([t0]{t0->exist();});
-    // std::thread th1([t1]{t1->exist();});
-    // std::thread th2([t2]{t2->exist();});
-    // std::thread th3([t3]{t3->exist();});
 
     std::string stop = "x";
 
@@ -79,10 +74,10 @@ void Map::simulate(){
         //std::cout << stop << std::endl;
         if (stop == "q")
         {   
-            SynchOut::print("**********QUIT**********");
+            SynchIO::print("**********QUIT**********");
            
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 2; i++)
             {
                 stop_passenger(i);
             }
@@ -93,19 +88,21 @@ void Map::simulate(){
             }
             
             
-            return;
+            break;
         }
         else
         {
             int ind = std::stoi(stop);
             stop_train(ind);
-            SynchOut::print("Stop success.");
+            SynchIO::print("Stop success.");
         }
         
     }
     
     
-
+    refresh();
+    endwin();
+    return;
 
 
 

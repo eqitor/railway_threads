@@ -21,19 +21,19 @@ void Passenger::exist(){
     while (is_active)
     {
         //wybierz cel
-        SynchOut::print("Passenger " + std::to_string(passenger_id) + " is visiting " + actual_station->get_station_name());
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+        //SynchIO::print("Passenger " + std::to_string(passenger_id) + " is visiting " + actual_station->get_station_name());
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000 + RandomIntGenerator::generate(0,500)));
         set_destination();
         //ustaw sie do budki - kup bilet
         int buy_success = try_buy_ticket();
 
         if(!buy_success) continue;
         //czekaj na pociąg
-        SynchOut::print("Passenger " + std::to_string(passenger_id) + " is waiting for train " + selected_train->get_name());
+        //SynchIO::print("Passenger " + std::to_string(passenger_id) + " is waiting for train " + selected_train->get_name());
         std::unique_lock<std::mutex> lk(selected_train->train_mutex);
         selected_train->train_cv.wait(lk, [&]{return actual_station->get_station_id() == selected_train->next_station->get_station_id();});
         //wsiądź jedź i wysiądź na stacji
-        SynchOut::print("Passenfer " + std::to_string(passenger_id) + " in on the way to " + destination_station->get_station_name());
+        //SynchIO::print("Passenfer " + std::to_string(passenger_id) + " in on the way to " + destination_station->get_station_name());
         this->selected_train->get_in();
         //jedz
         selected_train->train_cv.wait(lk, [&]{return destination_station->get_station_id() == selected_train->next_station->get_station_id();});
@@ -44,7 +44,7 @@ void Passenger::exist(){
         
     }
 
-    SynchOut::print("Passenfer " + std::to_string(passenger_id) + " stops.");
+    //SynchIO::print("Passenfer " + std::to_string(passenger_id) + " stops.");
     
 };
 
@@ -68,7 +68,7 @@ bool Passenger::try_buy_ticket(){
 
     int selected_booth_index = RandomIntGenerator::generate(0, actual_station->get_booths_ammount());
 
-    SynchOut::print("Passenger " + std::to_string(passenger_id) + " is trying to buy ticket to " + destination_station->get_station_name());
+    //SynchIO::print("Passenger " + std::to_string(passenger_id) + " is trying to buy ticket to " + destination_station->get_station_name());
     //ustaw w kolejce
     std::lock_guard<std::mutex> guard(booths[selected_booth_index]->booth_mutex);
     //sprawdź czy jest pociąg do celu z wolnymi miejscami
@@ -88,7 +88,7 @@ bool Passenger::try_buy_ticket(){
     
 
     if(this->selected_train == nullptr) return 0;
-    SynchOut::print("Passenger " + std::to_string(passenger_id) + " bought ticket for train " + selected_train->get_name());
+    //SynchIO::print("Passenger " + std::to_string(passenger_id) + " bought ticket for train " + selected_train->get_name());
     selected_train->buy_ticket();
     return 1;
 

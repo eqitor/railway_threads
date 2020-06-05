@@ -1,4 +1,5 @@
 #include "Station.h"
+#include "SynchIO.h"
 #include <string>
 
 unsigned int Station::id_counter = 0;
@@ -18,7 +19,7 @@ std::string Station::get_station_name(){
     return name;
 };
 
-Station::Station(std::string name, unsigned int booth_ammount){
+Station::Station(std::string name, unsigned int booth_ammount, int x, int y){
     station_id = id_counter++;
     this->name = name;
     
@@ -26,6 +27,9 @@ Station::Station(std::string name, unsigned int booth_ammount){
     {
         booths_vector.push_back(new TicketBooth());
     }
+
+    draw();
+
     
 }
 
@@ -35,6 +39,14 @@ int Station::get_booths_ammount(){
 
 std::vector<TicketBooth*> Station::get_booths_vector(){
     return booths_vector;
+}
+
+
+
+void Station::draw(){
+    win = newwin(20,10,1,1+10*station_id);
+    box(win,0,0);
+    SynchIO::swrefresh(win);
 }
 
 Station::Station(){};

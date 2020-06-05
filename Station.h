@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <ncurses.h>
 
 class TicketBooth;
 
@@ -17,6 +18,10 @@ class Station{
 
         static unsigned int id_counter;
 
+        WINDOW * win;
+
+        
+
     public:
 
         std::mutex mutex;
@@ -27,7 +32,9 @@ class Station{
         std::string get_station_name();
         std::vector<TicketBooth*> get_booths_vector();
 
-        Station(std::string, unsigned int);
+        void draw();
+
+        Station(std::string, unsigned int, int, int);
         Station();
         ~Station();
 };

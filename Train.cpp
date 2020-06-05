@@ -1,6 +1,7 @@
 #include "Train.h"
 #include <iostream> //TODO: remove iostream, after gui implementation
 #include <thread>
+#include "RandomIntGenerator.h"
 
 unsigned int Train::id_counter = 0;
 
@@ -16,22 +17,22 @@ void Train::exist(){
         std::unique_lock<std::mutex> train_lk(train_mutex);     //blokuje
 
         next_station = Map::find_station(route[current_dest]);
-        SynchOut::print("Train " + this->name + ", ID: " + std::to_string(train_id) + " is traveling to " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]));
+        //SynchIO::print("Train " + this->name + ", ID: " + std::to_string(train_id) + " is traveling to " + next_station->get_station_name()
+                   // + " ID " + std::to_string(route[current_dest]));
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 + RandomIntGenerator::generate(0,500) ));
         
 
         /*try access to Station*/
-        SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is waiting for access to " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]));
+        //SynchIO::print("Train " + name + ", ID: " + std::to_string(train_id) + " is waiting for access to " + next_station->get_station_name()
+                   // + " ID " + std::to_string(route[current_dest]));
 
 
          
 
         std::unique_lock<std::mutex> guard(next_station->mutex, std::defer_lock);
-        SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is on station " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]));
+       // SynchIO::print("Train " + name + ", ID: " + std::to_string(train_id) + " is on station " + next_station->get_station_name()
+                  //  + " ID " + std::to_string(route[current_dest]));
 
         guard.lock();
         
@@ -40,7 +41,7 @@ void Train::exist(){
 
         
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(4000 + RandomIntGenerator::generate(0,1000)));
         
 
         guard.unlock();
@@ -58,7 +59,7 @@ void Train::exist(){
         }
     }
 
-    SynchOut::print("****************************Train " + name + " stops.");
+    //SynchIO::print("****************************Train " + name + " stops.");
     
 
 }

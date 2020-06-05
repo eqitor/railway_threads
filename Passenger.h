@@ -3,7 +3,7 @@
 #include <chrono>
 #include <thread>
 #include <iostream>
-#include "SynchOut.h"
+#include "SynchIO.h"
 #include "Station.h"
 #include "Map.h"
 #include "Train.h"
