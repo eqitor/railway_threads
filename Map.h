@@ -22,11 +22,12 @@ class Map{
         static void stop_passenger(int);
         static void create_train(std::string, unsigned int, const std::initializer_list<unsigned int>);
         static void stop_train(int);
+        static void Read(std::atomic<bool>&);
 
     public:
 
         static void simulate();
         static Station *find_station(unsigned int);
-        static std::vector<Train*> find_trains_to_station(unsigned int);
+        static std::vector<Train*> find_trains_to_station(unsigned int, unsigned int);
 
 };

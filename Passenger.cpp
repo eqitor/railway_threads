@@ -22,7 +22,7 @@ void Passenger::exist(){
     {
         //wybierz cel
         SynchOut::print("Passenger " + std::to_string(passenger_id) + " is visiting " + actual_station->get_station_name());
-        std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(3000 + RandomIntGenerator::generate(-500,500)));
         set_destination();
         //ustaw sie do budki - kup bilet
         int buy_success = try_buy_ticket();
@@ -73,7 +73,7 @@ bool Passenger::try_buy_ticket(){
     std::lock_guard<std::mutex> guard(booths[selected_booth_index]->booth_mutex);
     //sprawdź czy jest pociąg do celu z wolnymi miejscami
     
-    auto trains = Map::find_trains_to_station(this->destination_station->get_station_id());
+    auto trains = Map::find_trains_to_station(this->actual_station->get_station_id(), this->destination_station->get_station_id());
     if(trains.empty()) return 0;
 
     for (int i = 0; i < trains.size(); i++)

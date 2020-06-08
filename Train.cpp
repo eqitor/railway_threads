@@ -1,6 +1,7 @@
 #include "Train.h"
 #include <iostream> //TODO: remove iostream, after gui implementation
 #include <thread>
+#include "RandomIntGenerator.h"
 
 unsigned int Train::id_counter = 0;
 
@@ -17,9 +18,9 @@ void Train::exist(){
 
         next_station = Map::find_station(route[current_dest]);
         SynchOut::print("Train " + this->name + ", ID: " + std::to_string(train_id) + " is traveling to " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]));
+                    + " ID " + std::to_string(route[current_dest]) + " $$ " + std::to_string(this->passengers) + "/" + std::to_string(this->capacity));
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000 + RandomIntGenerator::generate(-500,500)));
         
 
         /*try access to Station*/
@@ -40,7 +41,7 @@ void Train::exist(){
 
         
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(5000));
+        std::this_thread::sleep_for(std::chrono::milliseconds(5000 + RandomIntGenerator::generate(-1000,1000)));
         
 
         guard.unlock();

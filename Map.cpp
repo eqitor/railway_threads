@@ -5,6 +5,7 @@
 #include <iostream>
 #include <ncurses.h>
 #include <vector>
+#include <atomic>
 
 
 
@@ -38,56 +39,58 @@ void Map::create_train(std::string name, unsigned int capacity, const std::initi
 
 void Map::stop_train(int id){
     trains[id]->stop();
-    train_threads[id]->join();      //TODO: detatch?
+    train_threads[id]->join();      
 }
+
+
 
 void Map::simulate(){
     
+
+    int PASSENGERS = 10;
+
     std::cout << "Working" << std::endl;
 
     stations.push_back(new Station("Wroclaw", 5));      //0
     stations.push_back(new Station("Olesnica", 2));     //1
     stations.push_back(new Station("Brzeg", 1));        //2
     stations.push_back(new Station("Olawa", 3));        //3
+    stations.push_back(new Station("Opole", 7));        //4
+    stations.push_back(new Station("Walbrzych", 1));    //5
+    stations.push_back(new Station("Zielona Gora", 3));        //6
+    stations.push_back(new Station("Zagan", 6));        //7
 
 
-    create_train("Kosciuszko", 10, {0,1,2,3});
-    create_train("Hetman", 10, {3,2,1,0});
-    create_train("Kopernik", 10, {1,2,3});
-    create_train("Odra", 10, {2,3,0,1,3,1,2,0});
+    create_train("Kosciuszko", 10, {0,6,2});
+    create_train("Hetman", 10, {1,5,2,4});
+    create_train("Kopernik", 10, {7,3});
+    create_train("Odra", 10, {0,2,4});
 
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < PASSENGERS; i++)
     {
-        create_passenger(i%4);
+        create_passenger(i%stations.size());
     }
 
     
         
-
-
-    // std::thread th0([t0]{t0->exist();});
-    // std::thread th1([t1]{t1->exist();});
-    // std::thread th2([t2]{t2->exist();});
-    // std::thread th3([t3]{t3->exist();});
 
     std::string stop = "x";
 
     while (true)
     {
         std::cin >> stop;
-        //std::cout << stop << std::endl;
         if (stop == "q")
         {   
             SynchOut::print("**********QUIT**********");
            
 
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < passengers.size(); i++)
             {
                 stop_passenger(i);
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < trains.size(); i++)
             {
                 stop_train(i);
             }
@@ -95,11 +98,21 @@ void Map::simulate(){
             
             return;
         }
-        else
+        else if(std::stoi(stop) >=0 && std::stoi(stop) < trains.size()-1)
         {
-            int ind = std::stoi(stop);
-            stop_train(ind);
-            SynchOut::print("Stop success.");
+            if (trains[std::stoi(stop)]->is_routing())
+            {
+                SynchOut::print("**********STOP TRAIN**********");
+                stop_train(std::stoi(stop));
+            }
+            else
+            {
+                SynchOut::print("**********STOP TRAIN**********");
+                stop_train(std::stoi(stop));
+            }
+            
+            
+            
         }
         
     }
@@ -125,7 +138,7 @@ Station* Map::find_station(unsigned int station_id){
     
 };
 
-std::vector<Train*> Map::find_trains_to_station(unsigned int station_id){
+std::vector<Train*> Map::find_trains_to_station(unsigned int act_station_id, unsigned int dest_station_id){
 
     std::vector<Train*> trains_to_station;
     for (int i = 0; i < trains.size(); i++)
@@ -134,7 +147,7 @@ std::vector<Train*> Map::find_trains_to_station(unsigned int station_id){
         if(!trains[i]->is_routing()) continue;
 
         auto r = trains[i]->get_route();
-        if (std::find(r.begin(), r.end(), station_id) != r.end() )
+        if (std::find(r.begin(), r.end(), act_station_id) != r.end() && std::find(r.begin(), r.end(), dest_station_id) != r.end())
         {
             trains_to_station.push_back(trains[i]);
         }
