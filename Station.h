@@ -22,9 +22,12 @@ class Station{
 
         std::vector<int> visitors_ids;
 
+        
+
     public:
 
         std::mutex mutex;
+        std::mutex station_get_mutex;
 
         static unsigned int get_stations_ammount();
         int get_booths_ammount();

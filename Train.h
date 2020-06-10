@@ -6,7 +6,7 @@
 #include "Station.h"
 #include "Map.h"
 
-
+class Station;
 
 /*Representation of train.*/
 class Train{
@@ -27,7 +27,7 @@ class Train{
         static unsigned int id_counter;
 
     public:
-        Station *next_station;  //zrobić getter
+        Station *next_station;
         std::mutex train_mutex;
         std::condition_variable train_cv;
         std::vector<unsigned int> get_route();

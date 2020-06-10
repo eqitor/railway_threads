@@ -27,19 +27,7 @@ void GUI::main_loop(){
     
 }
 
-void GUI::draw_passanger_on_visitors(int pas_id, int station_id){
 
-
-    if (!(std::find(stations_state[station_id].begin(), stations_state[station_id].end(), pas_id) != stations_state[station_id].end()))
-    {
-         stations_state[station_id].push_back(pas_id);  
-    }
-
-    
-
-    
-
-}
 
 void GUI::draw(){
 
@@ -79,7 +67,6 @@ void GUI::init(){
 
     for (int i = 0; i < Map::stations.size(); i++)
     {
-        stations_state[i] = std::vector<int>();
         GUI::windows.push_back(newwin(station_box_size_y,
                                        station_box_size_x,
                                        start_point_y,

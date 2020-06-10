@@ -56,10 +56,10 @@ void Station::remove_visitor(int id){
 
 
 std::string Station::get_visitors_string(){
-    std::stringstream ss;
-    std::copy(visitors_ids.begin(), visitors_ids.end(), std::ostream_iterator<int>(ss," "));
-    std::string format = ss.str();
-    return format.substr(0, format.length()-1);
+    // std::stringstream ss;
+    // std::copy(visitors_ids.begin(), visitors_ids.end(), std::ostream_iterator<int>(ss," "));
+    // std::string format = ss.str();
+    return "x"; //format.substr(0, format.length()-1);
 }
 
 Station::Station(){};

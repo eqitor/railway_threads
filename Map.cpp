@@ -50,7 +50,7 @@ void Map::simulate(){
 
     int PASSENGERS = 10;
 
-    std::cout << "Working" << std::endl;
+    std::cout << "Workingg" << std::endl;
 
     stations.push_back(new Station("Wroclaw", 3));      //0
     stations.push_back(new Station("Olesnica", 2));     //1
@@ -61,10 +61,11 @@ void Map::simulate(){
     stations.push_back(new Station("Zielona Gora", 3));        //6
     stations.push_back(new Station("Zagan", 4));        //7
 
+    Map::gui->init();
 
     GUI* ptr = Map::gui;
 
-    std::thread gui_thread([ptr]{ptr->main_loop();});
+    
 
     create_train("Kosciuszko", 10, {0,6,2});
     create_train("Hetman", 10, {1,5,2,4});
@@ -77,7 +78,7 @@ void Map::simulate(){
         create_passenger(i%stations.size(),gui);
     }
 
-
+    std::thread gui_thread([ptr]{ptr->main_loop();});
     
 
         

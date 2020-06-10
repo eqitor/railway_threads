@@ -7,6 +7,7 @@
 
 class Passenger;
 class Train;
+class GUI;
 
 class Map{
 

@@ -18,7 +18,6 @@ class GUI{
         static void main_loop();
         static void init();
         static void draw();
-        static void draw_passanger_on_visitors(int,int);
         GUI();
         ~GUI();
 };

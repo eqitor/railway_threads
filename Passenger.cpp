@@ -23,7 +23,6 @@ void Passenger::exist(){
     {
         //wybierz cel
         SynchOut::print("Passenger " + std::to_string(passenger_id) + " is visiting " + actual_station->get_station_name());
-        this->gui->draw_passanger_on_visitors(this->passenger_id,this->actual_station->get_station_id());
         std::this_thread::sleep_for(std::chrono::milliseconds(3000 + RandomIntGenerator::generate(-500,500)));
         set_destination();
         //ustaw sie do budki - kup bilet
