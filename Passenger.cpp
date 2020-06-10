@@ -5,11 +5,12 @@
 
 unsigned int Passenger::id_counter = 0;
 
-Passenger::Passenger(Station* start_station){
+Passenger::Passenger(Station* start_station, GUI* gui){
     
     passenger_id = id_counter++;
     actual_station = start_station;
     is_active = true;
+    this->gui = gui;
 };
 
 Passenger::Passenger(){};
@@ -22,6 +23,7 @@ void Passenger::exist(){
     {
         //wybierz cel
         SynchOut::print("Passenger " + std::to_string(passenger_id) + " is visiting " + actual_station->get_station_name());
+        this->gui->draw_passanger_on_visitors(this->passenger_id,this->actual_station->get_station_id());
         std::this_thread::sleep_for(std::chrono::milliseconds(3000 + RandomIntGenerator::generate(-500,500)));
         set_destination();
         //ustaw sie do budki - kup bilet
@@ -39,8 +41,10 @@ void Passenger::exist(){
         selected_train->train_cv.wait(lk, [&]{return destination_station->get_station_id() == selected_train->next_station->get_station_id();});
         //wysiadam
         this->selected_train->get_out();
+        this->actual_station->remove_visitor(this->passenger_id);
         this->selected_train->free_ticket();
         this->actual_station = this->destination_station;
+        this->actual_station->add_visitor(this->passenger_id);
         
     }
 
@@ -97,4 +101,8 @@ bool Passenger::try_buy_ticket(){
 
 void Passenger::stop(){
     is_active = false;
+}
+
+int Passenger::get_id(){
+    return passenger_id;
 }

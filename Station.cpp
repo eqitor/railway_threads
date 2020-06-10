@@ -37,6 +37,31 @@ std::vector<TicketBooth*> Station::get_booths_vector(){
     return booths_vector;
 }
 
+void Station::add_visitor(int id){
+    visitors_ids.push_back(id);
+}
+
+void Station::remove_visitor(int id){
+    for (int i = 0; i < visitors_ids.size(); i++)
+    {
+        if (visitors_ids[i] == id)
+        {
+            visitors_ids.erase(visitors_ids.begin()+i);
+        }
+        
+    }
+    
+
+}
+
+
+std::string Station::get_visitors_string(){
+    std::stringstream ss;
+    std::copy(visitors_ids.begin(), visitors_ids.end(), std::ostream_iterator<int>(ss," "));
+    std::string format = ss.str();
+    return format.substr(0, format.length()-1);
+}
+
 Station::Station(){};
 
 Station::~Station(){

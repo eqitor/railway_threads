@@ -7,6 +7,7 @@
 #include "Station.h"
 #include "Map.h"
 #include "Train.h"
+#include "GUI.h"
 
 class Train;
 
@@ -18,12 +19,13 @@ class Passenger{
         std::mt19937 range{ std::random_device{}() };
         Train *selected_train;
         bool is_active;
+        GUI *gui;
 
 
         static unsigned int id_counter;
 
     public:
-        Passenger(Station*);
+        Passenger(Station*, GUI*);
         Passenger();
         ~Passenger();               //may cause error, due to actual_station deleting
 
@@ -31,4 +33,5 @@ class Passenger{
         void set_destination();
         bool try_buy_ticket();
         void stop();
+        int get_id();
 };

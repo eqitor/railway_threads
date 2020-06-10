@@ -3,6 +3,9 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <sstream>
+#include <iterator>
+#include "Passenger.h"
 
 class TicketBooth;
 
@@ -17,6 +20,8 @@ class Station{
 
         static unsigned int id_counter;
 
+        std::vector<int> visitors_ids;
+
     public:
 
         std::mutex mutex;
@@ -26,7 +31,9 @@ class Station{
         unsigned int get_station_id();
         std::string get_station_name();
         std::vector<TicketBooth*> get_booths_vector();
-
+        void add_visitor(int id);
+        void remove_visitor(int id);
+        std::string get_visitors_string();
         Station(std::string, unsigned int);
         Station();
         ~Station();

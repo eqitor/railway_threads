@@ -15,9 +15,10 @@ std::vector<std::thread*> Map::passenger_threads;
 std::vector<std::thread*> Map::train_threads;
 std::vector<Train*> Map::trains;
 std::vector<Passenger*> Map::passengers;
+GUI* Map::gui = new GUI();
 
-void Map::create_passenger(int station_id){
-    passengers.push_back(new Passenger(stations[station_id]));
+void Map::create_passenger(int station_id, GUI *gui){
+    passengers.push_back(new Passenger(stations[station_id], gui));
     Passenger *temp = passengers.back();
     std::thread* temp_thread = new std::thread([temp]{temp->exist();});
     passenger_threads.push_back(temp_thread);
@@ -51,15 +52,19 @@ void Map::simulate(){
 
     std::cout << "Working" << std::endl;
 
-    stations.push_back(new Station("Wroclaw", 5));      //0
+    stations.push_back(new Station("Wroclaw", 3));      //0
     stations.push_back(new Station("Olesnica", 2));     //1
     stations.push_back(new Station("Brzeg", 1));        //2
     stations.push_back(new Station("Olawa", 3));        //3
-    stations.push_back(new Station("Opole", 7));        //4
+    stations.push_back(new Station("Opole", 2));        //4
     stations.push_back(new Station("Walbrzych", 1));    //5
     stations.push_back(new Station("Zielona Gora", 3));        //6
-    stations.push_back(new Station("Zagan", 6));        //7
+    stations.push_back(new Station("Zagan", 4));        //7
 
+
+    GUI* ptr = Map::gui;
+
+    std::thread gui_thread([ptr]{ptr->main_loop();});
 
     create_train("Kosciuszko", 10, {0,6,2});
     create_train("Hetman", 10, {1,5,2,4});
@@ -69,10 +74,12 @@ void Map::simulate(){
 
     for (int i = 0; i < PASSENGERS; i++)
     {
-        create_passenger(i%stations.size());
+        create_passenger(i%stations.size(),gui);
     }
 
+
     
+
         
 
     std::string stop = "x";
