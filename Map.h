@@ -8,6 +8,7 @@
 class Passenger;
 class Train;
 class GUI;
+class Station;
 
 class Map{
 
@@ -23,11 +24,10 @@ class Map{
         
 
 
-        static void create_passenger(int,GUI*);
+        static void create_passenger(int);
         static void stop_passenger(int);
         static void create_train(std::string, unsigned int, const std::initializer_list<unsigned int>);
         static void stop_train(int);
-        static void Read(std::atomic<bool>&);
 
     public:
 

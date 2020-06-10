@@ -19,13 +19,12 @@ class Passenger{
         std::mt19937 range{ std::random_device{}() };
         Train *selected_train;
         bool is_active;
-        GUI *gui;
 
 
         static unsigned int id_counter;
 
     public:
-        Passenger(Station*, GUI*);
+        Passenger(Station*);
         Passenger();
         ~Passenger();               //may cause error, due to actual_station deleting
 

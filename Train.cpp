@@ -17,22 +17,22 @@ void Train::exist(){
         std::unique_lock<std::mutex> train_lk(train_mutex);     //blokuje
 
         next_station = Map::find_station(route[current_dest]);
-        SynchOut::print("Train " + this->name + ", ID: " + std::to_string(train_id) + " is traveling to " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]) + " $$ " + std::to_string(this->passengers) + "/" + std::to_string(this->capacity));
+        //SynchOut::print("Train " + this->name + ", ID: " + std::to_string(train_id) + " is traveling to " + next_station->get_station_name()
+                   // + " ID " + std::to_string(route[current_dest]) + " $$ " + std::to_string(this->passengers) + "/" + std::to_string(this->capacity));
 
         std::this_thread::sleep_for(std::chrono::milliseconds(1000 + RandomIntGenerator::generate(-500,500)));
         
 
         /*try access to Station*/
-        SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is waiting for access to " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]));
+        //SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is waiting for access to " + next_station->get_station_name()
+                   // + " ID " + std::to_string(route[current_dest]));
 
 
          
 
         std::unique_lock<std::mutex> guard(next_station->mutex, std::defer_lock);
-        SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is on station " + next_station->get_station_name()
-                    + " ID " + std::to_string(route[current_dest]));
+        //SynchOut::print("Train " + name + ", ID: " + std::to_string(train_id) + " is on station " + next_station->get_station_name()
+                  //  + " ID " + std::to_string(route[current_dest]));
 
         guard.lock();
         

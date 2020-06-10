@@ -38,10 +38,17 @@ std::vector<TicketBooth*> Station::get_booths_vector(){
 }
 
 void Station::add_visitor(int id){
+    std::lock_guard<std::mutex> g(station_get_mutex);
+    for (int i = 0; i < visitors_ids.size(); i++)
+    {
+        if(visitors_ids[i] == id) return;
+    }
+    
     visitors_ids.push_back(id);
 }
 
 void Station::remove_visitor(int id){
+    std::lock_guard<std::mutex> g(station_get_mutex);
     for (int i = 0; i < visitors_ids.size(); i++)
     {
         if (visitors_ids[i] == id)
@@ -55,11 +62,13 @@ void Station::remove_visitor(int id){
 }
 
 
+
 std::string Station::get_visitors_string(){
-    // std::stringstream ss;
-    // std::copy(visitors_ids.begin(), visitors_ids.end(), std::ostream_iterator<int>(ss," "));
-    // std::string format = ss.str();
-    return "x"; //format.substr(0, format.length()-1);
+    std::lock_guard<std::mutex> g(station_get_mutex);
+    std::stringstream ss;
+    std::copy(visitors_ids.begin(), visitors_ids.end(), std::ostream_iterator<int>(ss," "));
+    std::string format = ss.str();
+    return format.substr(0, format.length()-1);
 }
 
 Station::Station(){};

@@ -17,8 +17,8 @@ std::vector<Train*> Map::trains;
 std::vector<Passenger*> Map::passengers;
 GUI* Map::gui = new GUI();
 
-void Map::create_passenger(int station_id, GUI *gui){
-    passengers.push_back(new Passenger(stations[station_id], gui));
+void Map::create_passenger(int station_id){
+    passengers.push_back(new Passenger(stations[station_id]));
     Passenger *temp = passengers.back();
     std::thread* temp_thread = new std::thread([temp]{temp->exist();});
     passenger_threads.push_back(temp_thread);
@@ -61,9 +61,7 @@ void Map::simulate(){
     stations.push_back(new Station("Zielona Gora", 3));        //6
     stations.push_back(new Station("Zagan", 4));        //7
 
-    Map::gui->init();
-
-    GUI* ptr = Map::gui;
+    
 
     
 
@@ -75,9 +73,13 @@ void Map::simulate(){
 
     for (int i = 0; i < PASSENGERS; i++)
     {
-        create_passenger(i%stations.size(),gui);
+        create_passenger(i%stations.size());
     }
 
+
+    Map::gui->init();
+
+    GUI* ptr = Map::gui;
     std::thread gui_thread([ptr]{ptr->main_loop();});
     
 
@@ -90,7 +92,7 @@ void Map::simulate(){
         std::cin >> stop;
         if (stop == "q")
         {   
-            SynchOut::print("**********QUIT**********");
+            //SynchOut::print("**********QUIT**********");
            
 
             for (int i = 0; i < passengers.size(); i++)
@@ -102,26 +104,31 @@ void Map::simulate(){
             {
                 stop_train(i);
             }
+
+            Map::gui->stop();
+
+            gui_thread.join();
+
             
             
             return;
         }
-        else if(std::stoi(stop) >=0 && std::stoi(stop) < trains.size()-1)
-        {
-            if (trains[std::stoi(stop)]->is_routing())
-            {
-                SynchOut::print("**********STOP TRAIN**********");
-                stop_train(std::stoi(stop));
-            }
-            else
-            {
-                SynchOut::print("**********STOP TRAIN**********");
-                stop_train(std::stoi(stop));
-            }
+        // else if(std::stoi(stop) >=0 && std::stoi(stop) < trains.size()-1)
+        // {
+        //     if (trains[std::stoi(stop)]->is_routing())
+        //     {
+        //         SynchOut::print("**********STOP TRAIN**********");
+        //         stop_train(std::stoi(stop));
+        //     }
+        //     else
+        //     {
+        //         SynchOut::print("**********STOP TRAIN**********");
+        //         stop_train(std::stoi(stop));
+        //     }
             
             
             
-        }
+        // }
         
     }
     

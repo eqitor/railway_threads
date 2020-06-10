@@ -19,5 +19,7 @@ int main(){
     
     srand (time(NULL));
     Map::simulate();
+    refresh();
+    endwin();
 
 }
