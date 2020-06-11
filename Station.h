@@ -21,8 +21,9 @@ class Station{
         static unsigned int id_counter;
 
         std::vector<int> visitors_ids;
+        std::vector<int> platform_ids;
 
-        
+        friend class GUI;
 
     public:
 
@@ -37,6 +38,10 @@ class Station{
         void add_visitor(int id);
         void remove_visitor(int id);
         std::string get_visitors_string();
+        void add_platform_id(int id);
+        void remove_platform_id(int id);
+        std::string get_platform_string();
+        std::vector<std::string> get_station_info();
         Station(std::string, unsigned int);
         Station();
         ~Station();

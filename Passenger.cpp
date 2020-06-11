@@ -22,26 +22,27 @@ void Passenger::exist(){
     {   
 
 
-        this->actual_station->add_visitor(this->passenger_id);
+        
         
         //SynchOut::print("Passenger " + std::to_string(passenger_id) + " is visiting " + actual_station->get_station_name());
         int buy_success;
         do
-        {
-            std::this_thread::sleep_for(std::chrono::milliseconds(3000 + RandomIntGenerator::generate(-500,500)));
+        {   
+            this->actual_station->add_visitor(this->passenger_id);
+            std::this_thread::sleep_for(std::chrono::milliseconds(3000 + RandomIntGenerator::generate(-500,500)));\
+            this->actual_station->remove_visitor(this->passenger_id);
             set_destination();
             buy_success = try_buy_ticket();
         } while ( !buy_success );
         
 
-
         
-        //ustaw sie do budki - kup bilet
-         
+        this->actual_station->add_platform_id(this->passenger_id);
         //czekaj na pociąg
         //SynchOut::print("Passenger " + std::to_string(passenger_id) + " is waiting for train " + selected_train->get_name());
         std::unique_lock<std::mutex> lk(selected_train->train_mutex);
         selected_train->train_cv.wait(lk, [&]{return actual_station->get_station_id() == selected_train->next_station->get_station_id();});
+        this->actual_station->remove_platform_id(this->passenger_id);
         //wsiądź jedź i wysiądź na stacji
         //SynchOut::print("Passenfer " + std::to_string(passenger_id) + " in on the way to " + destination_station->get_station_name());
         this->selected_train->get_in();
@@ -82,11 +83,16 @@ bool Passenger::try_buy_ticket(){
 
     //SynchOut::print("Passenger " + std::to_string(passenger_id) + " is trying to buy ticket to " + destination_station->get_station_name());
     //ustaw w kolejce
+    booths[selected_booth_index]->add_passengers_ids(this->passenger_id);
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     std::lock_guard<std::mutex> guard(booths[selected_booth_index]->booth_mutex);
     //sprawdź czy jest pociąg do celu z wolnymi miejscami
     
     auto trains = Map::find_trains_to_station(this->actual_station->get_station_id(), this->destination_station->get_station_id());
-    if(trains.empty()) return 0;
+    if(trains.empty()) {
+        booths[selected_booth_index]->remove_passengers_ids(this->passenger_id);
+        return 0;
+    }
 
     for (int i = 0; i < trains.size(); i++)
     {
@@ -99,9 +105,13 @@ bool Passenger::try_buy_ticket(){
 
     
 
-    if(this->selected_train == nullptr) return 0;
+    if(this->selected_train == nullptr) {
+        booths[selected_booth_index]->remove_passengers_ids(this->passenger_id);
+        return 0;
+    }
     //SynchOut::print("Passenger " + std::to_string(passenger_id) + " bought ticket for train " + selected_train->get_name());
     selected_train->buy_ticket();
+    booths[selected_booth_index]->remove_passengers_ids(this->passenger_id);
     return 1;
 
 

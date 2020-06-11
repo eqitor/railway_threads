@@ -5,8 +5,6 @@
 #include <iostream>
 #include <ncurses.h>
 #include <vector>
-#include <atomic>
-
 
 
 
@@ -65,7 +63,7 @@ void Map::simulate(){
 
     
 
-    create_train("Kosciuszko", 10, {0,6,2});
+    create_train("Kosciuszkoo", 10, {0,6,2});
     create_train("Hetman", 10, {1,5,2,4});
     create_train("Kopernik", 10, {7,3});
     create_train("Odra", 10, {0,2,4});
